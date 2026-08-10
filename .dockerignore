@@ -1,0 +1,7 @@
+text
+.gradle
+build
+.idea
+.git
+.gitignore
+*.iml
