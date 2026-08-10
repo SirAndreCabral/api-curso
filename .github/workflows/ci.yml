@@ -34,3 +34,5 @@ jobs:
       - name: Executar testes
         run: ./gradlew test
 
+      - name: Gerar aplicação
+        run: ./gradlew build
