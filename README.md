@@ -2,30 +2,63 @@
 
 API REST desenvolvida em Java com Spring Boot para gerenciamento de cursos de uma empresa fictícia de cursos de programação.
 
-O projeto foi desenvolvido com foco em boas práticas de desenvolvimento de APIs REST, separação de responsabilidades, validação de dados, tratamento de exceções e testes automatizados.
+O projeto foi desenvolvido com foco em boas práticas de desenvolvimento de APIs REST, separação de responsabilidades, validação de dados, tratamento centralizado de exceções, testes automatizados, containerização e integração contínua.
+
+---
 
 ## 🚀 Tecnologias
 
-* Java 17
-* Spring Boot
-* Spring Web MVC
-* Spring Data JPA
-* Hibernate
-* PostgreSQL
-* Lombok
-* Bean Validation
-* SpringDoc OpenAPI / Swagger
-* JUnit 5
-* Mockito
-* MockMvc
-* Testcontainers
-* Gradle
+- Java 17
+- Spring Boot
+- Spring Web MVC
+- Spring Data JPA
+- Hibernate
+- PostgreSQL
+- Lombok
+- Bean Validation
+- SpringDoc OpenAPI / Swagger
+- JUnit 5
+- Mockito
+- MockMvc
+- Testcontainers
+- Gradle
+- Docker
+- Docker Compose
+- GitHub Actions
+- GitHub Container Registry (GHCR)
+
+---
+
+## 📊 Status
+
+![CI](https://github.com/SirAndreCabral/api-curso/actions/workflows/ci.yaml/badge.svg)
+
+![Docker Publish](https://github.com/SirAndreCabral/api-curso/actions/workflows/docker-publish.yml/badge.svg)
+
+Projeto funcional desenvolvido para estudo e portfólio.
+
+Atualmente o projeto possui:
+
+- API REST funcional;
+- PostgreSQL;
+- validação de dados;
+- tratamento centralizado de exceções;
+- documentação com Swagger/OpenAPI;
+- testes unitários;
+- testes de Controller;
+- testes de integração com Testcontainers;
+- Docker;
+- Docker Compose;
+- CI com GitHub Actions;
+- build e publicação automática da imagem Docker no GHCR.
+
+---
 
 ## 🏗️ Arquitetura
 
 O projeto utiliza uma arquitetura baseada na separação de responsabilidades:
 
-```text
+text
 src/
 ├── main/
 │   └── java/
@@ -45,438 +78,417 @@ src/
             ├── CourseIntegrationTest
             ├── CourseMapperTest
             └── CourseServiceTest
-```
 
-### Responsabilidade das camadas
+Responsabilidade das camadas
 
-**Controller**
+Controller
 
 Responsável pelos endpoints HTTP, recebimento das requisições, validações e retorno das respostas.
 
-**Service**
+Service
 
 Contém as regras de negócio da aplicação.
 
-**Repository**
+Repository
 
 Responsável pelo acesso aos dados através do Spring Data JPA.
 
-**DTO**
+DTO
 
-Define os dados que entram e saem da API, evitando expor diretamente a entidade em todas as operações.
+Define os dados que entram e saem da API, evitando expor diretamente as entidades.
 
-**Mapper**
+Mapper
 
 Responsável pela conversão entre entidades e DTOs.
 
-**Exception**
+Exception
 
 Centraliza as exceções específicas da aplicação e seu tratamento.
 
----
-
-## 📚 Funcionalidades
+📚 Funcionalidades
 
 A API permite:
 
-* Criar um curso
-* Listar todos os cursos
-* Filtrar cursos por nome
-* Filtrar cursos por categoria
-* Filtrar cursos por nome e categoria
-* Buscar um curso pelo ID
-* Atualizar um curso
-* Excluir um curso
-* Ativar/desativar um curso
-* Validar dados recebidos pela API
-* Retornar erros HTTP apropriados
-
----
-
-## 🔗 Endpoints
-
-### Criar curso
-
-```http
+Criar um curso;
+Listar todos os cursos;
+Filtrar cursos por nome;
+Filtrar cursos por categoria;
+Filtrar cursos por nome e categoria;
+Buscar um curso pelo ID;
+Atualizar um curso;
+Excluir um curso;
+Ativar/desativar um curso;
+Validar dados recebidos pela API;
+Retornar erros HTTP apropriados.
+🔗 Endpoints
+Criar curso
 POST /course/create_course
-```
 
 Request:
 
-```json
 {
   "name": "Java",
   "category": "Backend"
 }
-```
 
 Resposta:
 
-```json
 {
   "id": "uuid",
   "name": "Java",
   "category": "Backend",
   "active": true
 }
-```
 
-Retorno: `201 Created`
+Retorno: 201 Created
 
----
-
-### Listar cursos
-
-```http
+Listar cursos
 GET /course/list_courses
-```
 
-Retorno: `200 OK`
+Retorno: 200 OK
 
 Também é possível utilizar filtros.
 
-#### Por nome
-
-```http
+Por nome
 GET /course/list_courses?name=Java
-```
-
-#### Por categoria
-
-```http
+Por categoria
 GET /course/list_courses?category=Backend
-```
-
-#### Por nome e categoria
-
-```http
+Por nome e categoria
 GET /course/list_courses?name=Java&category=Backend
-```
-
----
-
-### Buscar curso por ID
-
-```http
+Buscar curso por ID
 GET /course/list_course/{id}
-```
 
-Retorno: `200 OK`
+Retorno: 200 OK
 
 Caso o curso não exista:
 
-```text
 404 Not Found
-```
-
----
-
-### Atualizar curso
-
-```http
+Atualizar curso
 PUT /course/update_course/{id}
-```
 
 Request:
 
-```json
 {
   "name": "Java Spring",
   "category": "Backend"
 }
-```
 
-Retorno: `200 OK`
+Retorno: 200 OK
 
----
-
-### Excluir curso
-
-```http
+Excluir curso
 DELETE /course/delete_course/{id}
-```
 
 Retorno:
 
-```text
 204 No Content
-```
-
----
-
-### Ativar ou desativar curso
-
-```http
+Ativar ou desativar curso
 PATCH /course/patch/{id}/active
-```
 
-O endpoint alterna o estado do atributo `active`.
+O endpoint alterna o estado do atributo active.
 
-Por exemplo:
-
-```text
-true → false
+true  → false
 false → true
-```
 
-Retorno: `200 OK`
+Retorno: 200 OK
 
----
-
-## 🗄️ Banco de dados
+🗄️ Banco de dados
 
 O projeto utiliza PostgreSQL.
 
-A entidade `CourseModel` possui os seguintes campos:
+A entidade CourseModel possui os seguintes campos:
 
-| Campo       | Tipo      | Descrição                    |
-| ----------- | --------- | ---------------------------- |
-| `id`        | UUID      | Identificador único          |
-| `name`      | String    | Nome do curso                |
-| `category`  | String    | Categoria do curso           |
-| `active`    | Boolean   | Indica se o curso está ativo |
-| `createdAt` | Timestamp | Data de criação              |
-| `updatedAt` | Timestamp | Data da última atualização   |
+Campo	Tipo	Descrição
+id	UUID	Identificador único
+name	String	Nome do curso
+category	String	Categoria do curso
+active	Boolean	Indica se o curso está ativo
+createdAt	Timestamp	Data de criação
+updatedAt	Timestamp	Data da última atualização
 
 Tabela:
 
-```text
 tb_course
-```
+⚙️ Configuração
 
----
+A aplicação utiliza variáveis de ambiente para configurar a conexão com o banco de dados.
 
-## ⚙️ Configuração
-
-As configurações do banco podem ser fornecidas através de variáveis de ambiente.
-
-Exemplo:
-
-```properties
 spring.application.name=api_cursos
 
-spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/api_cursos}
-spring.datasource.username=${DB_USERNAME:postgres}
-spring.datasource.password=${DB_PASSWORD:postgres}
+
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
+
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-```
-
-Os valores após `:` são valores padrão utilizados quando as variáveis de ambiente não estão configuradas.
-
-### Variáveis disponíveis
-
-```text
+Variáveis de ambiente
 DB_URL
 DB_USERNAME
 DB_PASSWORD
-```
 
 Exemplo:
 
-```text
 DB_URL=jdbc:postgresql://localhost:5432/api_cursos
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
-```
 
-> Em ambientes de produção, recomenda-se utilizar variáveis de ambiente ou um serviço de gerenciamento de secrets em vez de armazenar credenciais diretamente no código.
+As credenciais não devem ser armazenadas diretamente no código ou versionadas no repositório.
 
----
+▶️ Executando localmente
+Pré-requisitos
 
-## ▶️ Como executar
+Para executar sem Docker, é necessário possuir:
 
-### Pré-requisitos
-
-Antes de executar o projeto, é necessário ter instalado:
-
-* Java 17 ou superior
-* PostgreSQL
-* Git
+Java 17 ou superior;
+PostgreSQL;
+Git.
 
 Clone o repositório:
 
-```bash
-git clone <URL_DO_REPOSITORIO>
-```
+git clone https://github.com/SirAndreCabral/api-curso.git
 
 Entre na pasta:
 
-```bash
-cd api-cursos
-```
+cd api-curso
 
-Configure o banco PostgreSQL:
+Configure um banco PostgreSQL:
 
-```text
 Database: api_cursos
 Username: postgres
 Password: postgres
 Port: 5432
-```
 
-Depois execute a aplicação:
+Configure as variáveis de ambiente:
 
-```bash
+DB_URL=jdbc:postgresql://localhost:5432/api_cursos
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+
+Execute a aplicação:
+
+Linux / macOS / Git Bash
 ./gradlew bootRun
-```
-
-No Windows:
-
-```bash
+Windows
 gradlew.bat bootRun
-```
 
 A API ficará disponível em:
 
-```text
 http://localhost:8080
-```
+🐳 Executando com Docker
 
----
+O projeto possui Dockerfile e Docker Compose para facilitar a execução da aplicação e do PostgreSQL.
 
-## 📖 Swagger / OpenAPI
+Pré-requisitos
+Docker
+Docker Compose
+
+Configure um arquivo .env local:
+
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+
+O arquivo .env não deve ser versionado no Git.
+
+Execute:
+
+docker compose up --build
+
+A aplicação ficará disponível em:
+
+http://localhost:8080
+
+O PostgreSQL será executado em:
+
+localhost:5432
+
+Para executar em segundo plano:
+
+docker compose up --build -d
+
+Para parar os containers:
+
+docker compose down
+📦 Docker Image
+
+A imagem Docker da aplicação é construída e publicada automaticamente no GitHub Container Registry (GHCR) através do GitHub Actions.
+
+O processo ocorre quando há um push na branch main.
+
+A imagem utiliza as seguintes tags:
+
+latest
+<commit-sha>
+
+A imagem pode ser encontrada no GitHub Container Registry do projeto.
+
+📖 Swagger / OpenAPI
 
 A API possui documentação através do Swagger/OpenAPI.
 
-Após iniciar a aplicação, a documentação pode ser acessada pelo Swagger UI.
+Após iniciar a aplicação, acesse:
 
-```text
 http://localhost:8080/swagger-ui/index.html
-```
 
-Através da interface é possível visualizar os endpoints e realizar requisições diretamente na aplicação.
+Através da interface é possível:
 
----
+visualizar os endpoints;
+consultar os modelos de requisição e resposta;
+executar requisições;
+verificar códigos HTTP;
+testar os recursos da API.
+🧪 Testes
 
-## 🧪 Testes
+O projeto possui testes unitários, testes de Controller e testes de integração.
 
-O projeto possui testes unitários, testes do Controller e testes de integração.
+Testes unitários
 
-### Testes unitários
+São utilizados:
 
-Foram utilizados:
-
-* JUnit 5
-* Mockito
+JUnit 5;
+Mockito.
 
 A camada Service é testada isoladamente utilizando mocks para o Repository.
 
-### Testes do Controller
+Testes do Controller
 
 Os endpoints são testados utilizando:
 
-* `@WebMvcTest`
-* MockMvc
-* Mockito
+@WebMvcTest;
+MockMvc;
+Mockito.
 
 São verificados, entre outros:
 
-* códigos HTTP;
-* JSON retornado;
-* validações;
-* parâmetros;
-* chamadas para a Service;
-* IDs inválidos.
+códigos HTTP;
+JSON retornado;
+validações;
+parâmetros;
+chamadas para a Service;
+IDs inválidos.
+Testes de integração
 
-### Testes de integração
-
-A integração com o PostgreSQL é testada utilizando Testcontainers.
+A integração com PostgreSQL é testada utilizando Testcontainers.
 
 Durante os testes é criado um container PostgreSQL real, permitindo testar:
 
-* persistência de cursos;
-* consultas por nome;
-* consultas por categoria;
-* consultas combinadas;
-* integração entre Spring Data JPA, Hibernate e PostgreSQL.
-
-### Executar os testes
-
-```bash
+persistência de cursos;
+consultas por nome;
+consultas por categoria;
+consultas combinadas;
+integração entre Spring Data JPA, Hibernate e PostgreSQL.
+Executar os testes
 ./gradlew test
-```
 
 No Windows:
 
-```bash
 gradlew.bat test
-```
 
 Resultado esperado:
 
-```text
 BUILD SUCCESSFUL
-```
+🔄 CI/CD
 
----
+O projeto utiliza GitHub Actions para automatizar testes e construção da imagem Docker.
 
-## 🔍 Qualidade e boas práticas
+CI
 
-O projeto utiliza:
+A pipeline de CI é executada em:
 
-* DTOs para entrada e saída de dados;
-* separação entre Controller, Service e Repository;
-* validação de dados;
-* tratamento centralizado de exceções;
-* testes unitários;
-* testes de integração;
-* PostgreSQL real nos testes de integração;
-* documentação da API com OpenAPI;
-* variáveis de ambiente para configuração do banco.
+push na main;
+push na develop;
+Pull Requests para main;
+Pull Requests para develop.
 
----
+O processo executa:
 
-## 🐳 Docker
-
-A utilização de Docker para a aplicação e o banco de dados está prevista como próxima etapa de configuração do projeto.
-
-A proposta será permitir executar a API e o PostgreSQL através de Docker Compose, reduzindo a necessidade de configuração manual do ambiente.
-
----
-
-## 🔄 CI/CD
-
-A próxima etapa de automação do projeto será a configuração de uma pipeline de CI/CD.
-
-A pipeline terá como objetivo executar automaticamente, a cada alteração no repositório:
-
-```text
 Push / Pull Request
         ↓
 GitHub Actions
         ↓
-Build
+Checkout
         ↓
-Testes
+Java 17
         ↓
-Resultado
-```
+Gradle
+        ↓
+Testes automatizados
 
-Posteriormente, a pipeline poderá ser expandida para criação de imagem Docker e deploy automático.
+Caso algum teste falhe, a pipeline é interrompida.
 
----
+Docker Publish
 
-## 📌 Status do projeto
+Após o CI, a imagem Docker é construída e publicada no GitHub Container Registry.
 
-**Em desenvolvimento / projeto de estudo e portfólio.**
+Fluxo:
 
-Funcionalidades principais da API, testes automatizados, documentação e integração com PostgreSQL já estão implementados.
+Push na main
+     ↓
+   CI
+     ↓
+ Testes
+     ↓
+Docker Build
+     ↓
+Docker Image
+     ↓
+GHCR
 
-Próximas etapas:
+Dessa forma, cada alteração aprovada na main pode gerar uma nova versão da imagem Docker.
 
-* [ ] Docker / Docker Compose
-* [ ] CI com GitHub Actions
-* [ ] Build automático da aplicação
-* [ ] Pipeline de deploy
-* [ ] Melhorias de configuração para produção
+🔐 Segurança
 
----
+As credenciais do banco de dados são configuradas através de variáveis de ambiente.
 
-## 👨‍💻 Autor
+Arquivos contendo informações sensíveis, como:
 
-**André Cabral**
+.env
 
-Projeto desenvolvido como estudo prático de Java e Spring Boot, com foco no desenvolvimento de APIs REST, persistência de dados, testes automatizados e boas práticas de desenvolvimento.
+não devem ser enviados para o repositório.
+
+O projeto também utiliza o GITHUB_TOKEN fornecido pelo GitHub Actions para autenticação no GitHub Container Registry.
+
+🔍 Boas práticas utilizadas
+
+O projeto utiliza:
+
+DTOs para entrada e saída de dados;
+separação entre Controller, Service e Repository;
+validação de dados;
+tratamento centralizado de exceções;
+testes unitários;
+testes de Controller;
+testes de integração;
+PostgreSQL real nos testes de integração;
+Testcontainers;
+documentação da API com OpenAPI;
+variáveis de ambiente;
+Docker;
+Docker Compose;
+CI com GitHub Actions;
+publicação automatizada de imagens Docker;
+GitHub Container Registry.
+📌 Próximas etapas
+
+Algumas melhorias que podem ser implementadas futuramente:
+
+Aumentar cobertura de testes;
+Adicionar JaCoCo para análise de cobertura;
+Configurar proteção da branch main;
+Adicionar Dependabot;
+Melhorar observabilidade e logging;
+Adicionar paginação à listagem de cursos;
+Adicionar versionamento da API;
+Melhorar configurações específicas para produção.
+👨‍💻 Autor
+
+André Cabral
+
+Projeto desenvolvido como estudo prático de Java e Spring Boot, 
+com foco no desenvolvimento de APIs REST, persistência de dados, 
+testes automatizados, containerização e práticas de integração contínua.
+
+GitHub:
+
+https://github.com/SirAndreCabral
