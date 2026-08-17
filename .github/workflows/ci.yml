@@ -36,9 +36,29 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v5
 
+      - name: Login no GitHub Container Registry
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Construir imagem Docker
-        run: docker build -t api-cursos .
+        run: |
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/api-curso:latest \
+            .
+
+      - name: Publicar imagem no GHCR
+        if: github.event_name == 'push'
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/api-curso:latest
