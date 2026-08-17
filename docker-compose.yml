@@ -15,13 +15,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d api_cursos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 
   api:
     build: .
     restart: always
 
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/api_cursos
