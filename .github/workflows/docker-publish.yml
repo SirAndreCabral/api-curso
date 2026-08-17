@@ -24,12 +24,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extrair metadados da imagem
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/sirandrecabral/api-curso
-
       - name: Build e Push da imagem
         uses: docker/build-push-action@v6
         with:
